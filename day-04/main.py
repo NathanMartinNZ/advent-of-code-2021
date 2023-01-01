@@ -33,7 +33,7 @@ def check_if_won(board, board_idx):
             return board_idx
 
     # Check cols
-    for row in list(map(list, zip(*board))):
+    for row in list(map(list, zip(*board))): # Transpose board
         winning_nums = sum([1 for num in row if num[1] == True])
         if winning_nums == 5:
             return board_idx
