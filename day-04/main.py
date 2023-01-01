@@ -54,18 +54,13 @@ for number in numbers:
             mark_board(board, number)
     
     for idx, board in enumerate(boards):
-        won = check_if_won(board, idx)
-        if won >= 0:
-            if first_winner_score == 0:
-                score = calc_score(boards[won], number)
-                first_winner_score = score
-            
-            not_yet_won = all(winner[0] != idx for winner in winners)
-            if not_yet_won:
-                winners.append([idx, number])
+        won = check_if_won(board, idx) >= 0
+        not_yet_won = all(winner[0] != idx for winner in winners)
+        if won and not_yet_won:
+            winners.append([idx, number])
 
 
-part_1_answer = first_winner_score
+part_1_answer = calc_score(boards[winners[0][0]], winners[0][1])
 print(part_1_answer)
 
 part_2_answer = calc_score(boards[winners[-1][0]], winners[-1][1])
