@@ -16,8 +16,7 @@ with open("input.txt") as f:
     
 
 ### PART 1 & 2 ###
-first_winner_score = 0
-winners = [] # [[board_idx, drawnNumberToWin]]
+winners = [] # {board_idx, drawnNumberToWin}
 
 def mark_board(board, drawn_num):
     for row in board:
@@ -40,28 +39,25 @@ def check_if_won(board, board_idx):
 
     return -1
 
-def calc_score(board, lastDrawnNumber):
+def calc_score(board, drawnNumberToWin):
     unmarked_sum = 0
     for row in board:
         unmarked_sum += sum([num[0] for num in row if num[1] == False])
 
-    return unmarked_sum * lastDrawnNumber
+    return unmarked_sum * drawnNumberToWin
 
 for number in numbers:
     for idx, board in enumerate(boards):
-        not_yet_won = all(winner[0] != idx for winner in winners)
+        not_yet_won = all(winner["idx"] != idx for winner in winners)
         if not_yet_won:
             mark_board(board, number)
-    
-    for idx, board in enumerate(boards):
-        won = check_if_won(board, idx) >= 0
-        not_yet_won = all(winner[0] != idx for winner in winners)
-        if won and not_yet_won:
-            winners.append([idx, number])
+            won = check_if_won(board, idx) >= 0
+            if won:
+                winners.append({"idx": idx, "drawnNumberToWin": number})
 
 
-part_1_answer = calc_score(boards[winners[0][0]], winners[0][1])
+part_1_answer = calc_score(boards[winners[0]["idx"]], winners[0]["drawnNumberToWin"])
 print(part_1_answer)
 
-part_2_answer = calc_score(boards[winners[-1][0]], winners[-1][1])
+part_2_answer = calc_score(boards[winners[-1]["idx"]], winners[-1]["drawnNumberToWin"])
 print(part_2_answer)
